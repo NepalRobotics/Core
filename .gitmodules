@@ -1,0 +1,6 @@
+[submodule "BeliefSystem"]
+	path = BeliefSystem
+	url = git@github.com:NepalRobotics/BeliefSystem.git
+[submodule "MAVLinkConnector"]
+	path = MAVLinkConnector
+	url = git@github.com:NepalRobotics/MAVLinkConnector.git
