@@ -88,3 +88,7 @@ if __name__ == '__main__':
 
   mavLink = MavLinkConnector(messenger.get_queue(Messenger.Queues.uavStatus))
   logger.debug('MAV Link connector spawned')
+
+  #TODO: spawn BeliefSystem, RadioListener
+  #TODO: start processes
+  #TODO: start messenger loop
