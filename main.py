@@ -44,10 +44,17 @@ class Messenger(object):
         self.__clear_queue
       self.__queue.put(obj)
 
+    def __get_safe(self):
+      try:
+        return self.__queue.get(False)
+      except multiprocessing.Queue.Empty:
+        self.__logger.warn('Tried to get from empty queue')
+        return None
+
     def get(self):
       if self.__queue.empty():
         return None
-      return self.__queue.get()
+      return self.__get_safe()
 
 
   def __init__(self):
