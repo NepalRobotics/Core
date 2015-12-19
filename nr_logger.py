@@ -78,7 +78,8 @@ class QueueLogger(logging.Logger):
     handler = QueueLoggingHandler(self._queue)
     handler.setLevel(logging.DEBUG)
 
-    formatter = logging.Formatter("%(asctime)s %(name)s: %(message)s")
+    formatter = logging.Formatter( \
+        "%(asctime)s %(name)s: [%(levelname)s] %(message)s")
     handler.setFormatter(formatter)
 
     self.addHandler(handler)
