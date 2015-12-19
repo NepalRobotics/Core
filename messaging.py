@@ -1,12 +1,15 @@
-from multiprocessing import Array, Value
+from multiprocessing import Array, Value, Queue
 import cPickle as pickle
-import logging
 import sys
 
 
 class Messenger(object):
   """
     Manages messaging between local processes
+
+    NOTE: Logging cannot be used here because the logging system relies on
+    Messenger.
+    NOTE: Messenger is intended to be used by the main process only.
   """
 
   class Queues(object):
@@ -16,6 +19,7 @@ class Messenger(object):
     uavStatus = 'uavStatus'
     toBelief = 'toBelief'
     fromRadio = 'fromRadio'
+    logging = 'logging'
 
   class Mailbox(object):
     """
@@ -33,26 +37,22 @@ class Messenger(object):
       # Whether the slot is in use. If it's not, it's zero, otherwise it's the
       # length of whatever's in it.
       self.__used = Value('i', 0)
-      self.__logger = logging.getLogger('SingleQueue[' + name + ']')
-      self.__logger.debug('Initialized SingleQueue')
 
     def __clear_queue(self):
       if not self.__used.value:
-        self.__logger.warn('Tried to clear empty queue')
         return
 
       self.__used.value = 0
 
     def set(self, obj):
       if self.__used.value:
-        self.__logger.debug('Queue has not been read')
         self.__clear_queue()
 
       # Pickle the data and write it in.
       pickled = pickle.dumps(obj)
       if len(pickled) > self._SIZE:
-        self.__logger.critical("Object of size %d exceeds maximum size of %d!" \
-                               % (len(pickled), self._SIZE))
+        print "Object of size %d exceeds maximum size of %d!" % \
+              (len(pickled), self._SIZE)
         sys.exit(1)
 
       self.__state.value = pickled
@@ -76,6 +76,8 @@ class Messenger(object):
     self._queue_map[self.Queues.uavStatus] = self.Mailbox(self.Queues.uavStatus)
     self._queue_map[self.Queues.toBelief] = self.Mailbox(self.Queues.toBelief)
     self._queue_map[self.Queues.fromRadio] = self.Mailbox(self.Queues.fromRadio)
+
+    self._queue_map[self.Queues.logging] = Queue()
 
   def get_queue(self, queue_name):
     return self._queue_map[queue_name]
