@@ -13,7 +13,7 @@ class TestMailbox(unittest.TestCase):
     self.test_box = messaging.Messenger.Mailbox("testBox")
 
   def test_basic(self):
-    """ A test of the basic functionality of SingleQueue. """
+    """ A test of the basic functionality of Mailbox. """
     # It should start empty.
     self.assertEqual(None, self.test_box.get())
 
