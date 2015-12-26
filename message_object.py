@@ -3,12 +3,15 @@ This module contains classes for sending/receiving encoded data over
 IPC sockets.
 """
 
+
 import json, inspect, time
+
 
 class MessageObject(object):
   """
   Class representing an IPC message
   """
+
   def __init__(self):
     """
     Construct a new MessageObject object.
@@ -17,6 +20,7 @@ class MessageObject(object):
       A new instance of a message object
     """
     self.time_created = time.time()
+
   def primitives(self):
     """Return a serializable dictionary of self's contents
 
@@ -48,10 +52,12 @@ class MessageObject(object):
     """
     return json.dumps(self.primitives())
 
+
 class VehicleState(MessageObject):
   """
   Encodable UAV craft state information
   """
+
   def __init__(self, vehicle_uid, **kwargs):
     """Construct a new VehicleState object
 
@@ -61,7 +67,7 @@ class VehicleState(MessageObject):
 
     Returns: returns nothing
     """
-    MessageObject.__init__()
+    super(VehicleState, self).__init__()
     self.vehicle_uid = vehicle_uid
     self.vehicle_is_armed = kwargs.get("vehicle_is_armed")
     self.attitude_pitch = kwargs.get("attitude_pitch")
@@ -86,15 +92,26 @@ class RadioState(MessageObject):
     strength: the signal strength metric
   """
   def __init__(self, lob, strength):
-    MessageObject.__init__()
+    super(RadioState, self).__init__()
     # The LOB to the signal source.
     self.lob = lob
     # The strength of the signal.
     self.strength = strength
 
-class LogEvent(MessageObject):
-  """
-  Encodable information for recording to system log
-  """
-  #TODO: implement
-  pass
+class BeliefMessage(MessageObject):
+  """ A message to send to the belief system that contains both radio data and
+  corresponding vehicle state data. """
+
+  def __init__(self, **kwargs):
+    super(BeliefMessage, self).__init__()
+
+    # Aggregated radio data from this cycle. Ideally, it should be composed of
+    # tuples of lobs and strengths.
+    self.radio_data = kwargs.get("radio_data")
+
+    # Drone position and velocity measurements. Positions are relative to the
+    # WGS84 coordinate system, and velocities are in m/s.
+    self.latitude = kwargs.get("latitude")
+    self.longitude = kwargs.get("longitude")
+    self.x_velocity = kwargs.get("x_velocity")
+    self.y_velocity = kwargs.get("y_velocity")
