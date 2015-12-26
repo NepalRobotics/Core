@@ -1,4 +1,4 @@
-from multiprocessing import Array, Value, Queue
+from multiprocessing import Array, Queue, Value
 import cPickle as pickle
 import sys
 
@@ -73,9 +73,9 @@ class Messenger(object):
   def __init__(self):
     self._queue_map = {}
     # Set up lockable data structures for local belief generation
-    self._queue_map[self.Queues.uavStatus] = self.Mailbox(self.Queues.uavStatus)
+    self._queue_map[self.Queues.uavStatus] = Queue()
     self._queue_map[self.Queues.toBelief] = self.Mailbox(self.Queues.toBelief)
-    self._queue_map[self.Queues.fromRadio] = self.Mailbox(self.Queues.fromRadio)
+    self._queue_map[self.Queues.fromRadio] = Queue()
 
     self._queue_map[self.Queues.logging] = Queue()
 
