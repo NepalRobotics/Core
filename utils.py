@@ -80,3 +80,9 @@ class TestQueue:
 
   def get_nowait(self):
     return self.get(block=False)
+
+  def empty(self):
+    """ Checks whether the fake queue is empty or not.
+    Returns:
+      True if the queue is empty, False otherwise. """
+    return not len(self.__buffer)
