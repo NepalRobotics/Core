@@ -115,3 +115,12 @@ class BeliefMessage(MessageObject):
     self.longitude = kwargs.get("longitude")
     self.x_velocity = kwargs.get("x_velocity")
     self.y_velocity = kwargs.get("y_velocity")
+
+  def zero(self):
+    """ Initializes all parameters to zero, and clears radio data. """
+    self.radio_data = []
+
+    self.latitude = 0
+    self.longitude = 0
+    self.x_velocity = 0
+    self.y_velocity = 0
