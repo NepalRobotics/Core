@@ -31,22 +31,26 @@ class Messenger(object):
     # The size of the array that stores data.
     _SIZE = 1024
 
-    def __init__(self, name):
+    def __init__(self):
       # Where we write the element.
       self.__state = Array('c', self._SIZE)
       # Whether the slot is in use. If it's not, it's zero, otherwise it's the
       # length of whatever's in it.
       self.__used = Value('i', 0)
 
-    def __clear_queue(self):
+    def __clear_box(self):
+      """ Clears all data stored in the box. """
       if not self.__used.value:
         return
 
       self.__used.value = 0
 
     def set(self, obj):
+      """ Puts new data in the box.
+      Args:
+        obj: What to put in the box. """
       if self.__used.value:
-        self.__clear_queue()
+        self.__clear_box()
 
       # Pickle the data and write it in.
       pickled = pickle.dumps(obj)
@@ -59,6 +63,9 @@ class Messenger(object):
       self.__used.value = len(pickled)
 
     def get(self):
+      """ Gets whatever's in the box.
+      Returns:
+        The data, or None if the box is empty. """
       if not self.__used.value:
         return None
 
@@ -74,7 +81,7 @@ class Messenger(object):
     self._queue_map = {}
     # Set up lockable data structures for local belief generation
     self._queue_map[self.Queues.uavStatus] = Queue()
-    self._queue_map[self.Queues.toBelief] = self.Mailbox(self.Queues.toBelief)
+    self._queue_map[self.Queues.toBelief] = self.Mailbox()
     self._queue_map[self.Queues.fromRadio] = Queue()
 
     self._queue_map[self.Queues.logging] = Queue()

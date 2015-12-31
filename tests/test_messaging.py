@@ -10,7 +10,7 @@ class TestMailbox(unittest.TestCase):
   """ Tests for the Mailbox class. """
 
   def setUp(self):
-    self.test_box = messaging.Messenger.Mailbox("testBox")
+    self.test_box = messaging.Messenger.Mailbox()
 
   def test_basic(self):
     """ A test of the basic functionality of Mailbox. """
