@@ -1,4 +1,4 @@
-from multiprocessing import Array, Queue, Value
+from multiprocessing import Array, Lock, Queue, Value
 import cPickle as pickle
 import sys
 
@@ -37,6 +37,8 @@ class Messenger(object):
       # Whether the slot is in use. If it's not, it's zero, otherwise it's the
       # length of whatever's in it.
       self.__used = Value('i', 0)
+      # Allows us to block until it's read.
+      self.__read_lock = Lock()
 
     def __clear_box(self):
       """ Clears all data stored in the box. """
@@ -44,6 +46,7 @@ class Messenger(object):
         return
 
       self.__used.value = 0
+      self.__read_lock.release()
 
     def set(self, obj):
       """ Puts new data in the box.
@@ -62,6 +65,8 @@ class Messenger(object):
       self.__state.value = pickled
       self.__used.value = len(pickled)
 
+      self.__read_lock.acquire()
+
     def get(self):
       """ Gets whatever's in the box.
       Returns:
@@ -74,7 +79,15 @@ class Messenger(object):
       pickled = pickled[:self.__used.value]
       self.__used.value = 0
 
+      self.__read_lock.release()
+
       return pickle.loads(pickled)
+
+    def wait_for_read(self):
+      """ Blocks until the value in the box is read. If the box is empty, it
+      returns immediately. """
+      self.__read_lock.acquire()
+      self.__read_lock.release()
 
 
   def __init__(self):
