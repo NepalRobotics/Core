@@ -94,7 +94,7 @@ class Messenger(object):
     self._queue_map = {}
     # Set up lockable data structures for local belief generation
     self._queue_map[self.Queues.uavStatus] = Queue()
-    self._queue_map[self.Queues.toBelief] = self.Mailbox()
+    self._queue_map[self.Queues.toBelief] = Queue()
     self._queue_map[self.Queues.fromRadio] = Queue()
 
     self._queue_map[self.Queues.logging] = Queue()
