@@ -86,3 +86,7 @@ class TestQueue:
     Returns:
       True if the queue is empty, False otherwise. """
     return not len(self.__buffer)
+
+  def clear(self):
+    """ Removes everything in the queue. """
+    self.__buffer = deque()
