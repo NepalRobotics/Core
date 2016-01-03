@@ -7,7 +7,7 @@ import Queue
 import time
 
 
-class PhasedLoopLimitter:
+class PhasedLoopLimiter:
   """ Constrains a loop to running a particular number of iterations per second.
   """
 
