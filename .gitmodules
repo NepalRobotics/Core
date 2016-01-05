@@ -4,3 +4,6 @@
 [submodule "MAVLinkConnector"]
 	path = MAVLinkConnector
 	url = https://github.com/NepalRobotics/MAVLinkConnector.git
+[submodule "Utils"]
+	path = Utils
+	url = https://github.com/NepalRobotics/Utils.git

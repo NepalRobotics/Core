@@ -5,9 +5,9 @@ import multiprocessing
 import logging
 import os
 
-from messaging import Messenger
-from process import Process
-import nr_logger
+from Utils.messaging import Messenger
+from Utils.process import Process
+from Utils import nr_logger
 
 
 def run_processes(messenger, logger):
